@@ -5,24 +5,30 @@
 class ResourceManager
 {
 private:
-    Resource res;
+    Resource* res;
 
 public:
     
-    ResourceManager() : res() {}
+    ResourceManager() : res(new Resource()) {}
+    ResourceManager(const ResourceManager& other) : res(new Resource(*other.res)) {}
 
     
-    double get() { return res.get(); }
-
-   
-    ResourceManager(const ResourceManager& other) : res(other.res) {}
-
-
+    ResourceManager& operator=(const ResourceManager& other)
+    {
+        if (this != &other) {
+            delete res;                          
+            res = new Resource(*other.res); 
+        }
+        return *this;
+    }
     
+    ~ResourceManager()
+    {
+        delete res; 
+    }
 
-
-    
-
-
-
+    double get() const
+    {
+        return (*res).get(); 
+    }
 };
